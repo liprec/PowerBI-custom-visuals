@@ -1,0 +1,80 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "Filter",
+            "name": "Filter",
+            "kind": 0
+        },
+        {
+            "name": "Values",
+            "displayName": "Values",
+            "kind": 1
+        }
+    ],
+    "dataViewMappings": [
+        {
+            "conditions": [
+                {
+                    "Filter": {
+                        "min": 1,
+                        "max": 1
+                    },
+                    "Values": {
+                        "min": 0,
+                        "max": 1
+                    }
+                }
+            ],
+            "categorical": {
+                "categories": {
+                    "for": {
+                        "in": "Filter"
+                    },
+                    "dataReductionAlgorithm": {
+                        "top": {
+                            "count": 1000
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "objects": {
+        "general": {
+            "displayName": "General",
+            "properties": {
+                "filter": {
+                    "type": {
+                        "filter": {}
+                    }
+                }
+            }
+        },
+        "play": {
+            "displayName": "Duration",
+            "properties": {
+                "playType": {
+                    "displayName": "Type",
+                    "type": {
+                        "enumeration": [
+                            { "value": "0", "displayName": "Step duration"},
+                            { "value": "1", "displayName": "Total duration"}
+                        ]
+                    }
+                },
+                "stepDuration": {
+                    "displayName": "Step duration",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "totalDuration": {
+                    "displayName": "Total duration",
+                    "type": {
+                        "numeric": true
+                    }
+                }
+            }
+        }
+    }
+}

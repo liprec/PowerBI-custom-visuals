@@ -1,0 +1,35 @@
+{
+    "fromValue": {
+        "items": {
+            "t": {
+                "entity": "TimelineTable"
+            }
+        }
+    },
+    "whereItems": [
+        {
+            "condition": {
+                "_kind": 13,
+                "comparison": 0,
+                "left": {
+                    "_kind": 2,
+                    "source": {
+                        "_kind": 0,
+                        "entity": "TimelineTable",
+                        "variable": "t"
+                    },
+                    "ref": "City"
+                },
+                "right": {
+                    "_kind": 17,
+                    "type": {
+                        "underlyingType": 1,
+                        "category": null
+                    },
+                    "value": "Cairo",
+                    "valueEncoded": "'Cairo'"
+                }
+            }
+        }
+    ]
+}

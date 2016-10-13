@@ -1,0 +1,23 @@
+{
+  "visual": {
+    "name": "timeAxis",
+    "displayName": "TimeAxis",
+    "guid": "PBI_CV_FB59302E_FBE8_4487_8489_747B1774C5AD",
+    "visualClassName": "TimeAxis",
+    "version": "1.0.0",
+    "description": "",
+    "supportUrl": "",
+    "gitHubUrl": ""
+  },
+  "apiVersion": "1.1.0",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "assets": {
+    "icon": "assets/icon.png"
+  },
+  "externalJS": [],
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json"
+}

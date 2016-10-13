@@ -1,0 +1,6 @@
+{
+  "name": "visual",
+  "dependencies": {
+    "powerbi-api-helper": "^1.0.1"
+  }
+}
