@@ -1,6 +1,6 @@
 ﻿///<reference path="../../../_references.ts"/>
 
-module powerbi.visuals.samples {
+module powerbi.visuals {
     import SelectionManager = utility.SelectionManager;
     import ClassAndSelector = jsCommon.CssConstants.ClassAndSelector;
     import createClassAndSelector = jsCommon.CssConstants.createClassAndSelector;
@@ -482,7 +482,7 @@ module powerbi.visuals.samples {
                 return;
             }
             else if (childFilters[0].isLeaf) { // Leaf level
-                if (totalChildren !== childFilters.length) {
+                if ((totalChildren !== childFilters.length) || this.options.slicerSettings.general.selfFilterEnabled) {
                     var returnFilter = childFilters[0].id;
                     memberCount += childFilters.length;
                     if (childFilters.length > 1) {
@@ -503,7 +503,7 @@ module powerbi.visuals.samples {
                 memberCount += childFilters.length;
                 for (var i = 0; i < childFilters.length; i++) {
                     var childChildFilter = this.getChildFilters(dataPoints, childFilters[i].ownId, level + 1);
-                    if (childChildFilter) {
+                    if ((childChildFilter) || this.options.slicerSettings.general.selfFilterEnabled) {
                         allSelected = false;
                         memberCount += childChildFilter.memberCount;
                         if (returnFilter) {
@@ -707,8 +707,11 @@ module powerbi.visuals.samples {
                 }],
                 table: {
                     rows: {
-                        for: { in: 'Fields' },
-                        dataReductionAlgorithm: { bottom: { count: 4000 } }
+                        select: 
+                        [
+                            {for: { in: 'Fields' }, dataReductionAlgorithm: { bottom: { count: 4000 } } },
+                            {for: { in: 'Values' } }
+                        ]
                     },
                 }
             }],
@@ -807,10 +810,6 @@ module powerbi.visuals.samples {
             filterMappings: {
                 measureFilter: { targetRoles: ['Fields'] },
             },
-            sorting: {
-                default: {},
-            },
-
         };
 
         public static formatStringProp: DataViewObjectPropertyIdentifier = {
@@ -945,7 +944,7 @@ module powerbi.visuals.samples {
             expandedIds = DataViewObjects.getValue<string>(objects, hierarchySlicerProperties.expandedValuePropertyIdentifier, "").split(',');
 
             defaultSettings.general.selfFilterEnabled = DataViewObjects.getValue<boolean>(objects, hierarchySlicerProperties.selfFilterEnabled, defaultSettings.general.selfFilterEnabled);
-            
+
             for (var r = 0; r < rows.length; r++) {
                 var parentExpr = null;
                 var parentId: string = '';
@@ -975,7 +974,7 @@ module powerbi.visuals.samples {
                         }
                     }
                     var filterExpr = powerbi.data.SQExprBuilder.compare(
-                        powerbi.data.QueryComparisonKind.Equal,
+                        0, //powerbi.data.QueryComparisonKind.Equal
                         dataView.table.columns[c].expr ?
                             <powerbi.data.SQExpr>dataView.table.columns[c].expr :
                             <powerbi.data.SQExpr>dataView.categorical.categories[0].identityFields[c], // Needed for PBI May 2016
@@ -1053,7 +1052,7 @@ module powerbi.visuals.samples {
                 }
                 dataPoints.map(d => d.isLeaf = parent[d.ownId] !== 0)
             } else {
-                dataPoints = dataPoints.sort((d1, d2) => d1.order - d2.order); // set new dataPoints based on the searchText
+                dataPoints = dataPoints.sort((d1, d2) => d1.order - d2.order);
             }
 
             // Set isHidden property
@@ -1232,7 +1231,7 @@ module powerbi.visuals.samples {
 
             this.treeView
                 .viewport(this.getBodyViewport(this.viewport))
-                .rowHeight(this.settings.slicerText.height)
+                .rowHeight(this.getRowHeight())
                 .data(
                 data.dataPoints.filter((d) => !d.isHidden), // Expand/Collapse
                 (d: HierarchySlicerDataPoint) => $.inArray(d, data.dataPoints),
